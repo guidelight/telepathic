@@ -1,0 +1,29 @@
+{
+  "name": "telepathic",
+  "version": "0.0.0",
+  "description": "AngularJS $location wrapper that adds feature namespace",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guidelight/telepathic.git"
+  },
+  "keywords": [
+    "AngularJS",
+    "Routing",
+    "location",
+    "url",
+    "namespace"
+  ],
+  "author": "Guidelight",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/guidelight/telepathic/issues"
+  },
+  "homepage": "https://github.com/guidelight/telepathic"
+}
