@@ -1,4 +1,4 @@
-!function (global) {
+(function(window, angular, undefined) {
 
 'use strict';
 
@@ -133,4 +133,4 @@ function ($routeProvider, $locationProvider, $location) {
     };
 }]);
 
-}(this);
+}(window, window.angular);
