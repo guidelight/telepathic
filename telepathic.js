@@ -70,7 +70,7 @@ function ($routeProvider, $locationProvider, $location) {
 
         for (var i = 0, end = routeDefs.length; i < end; i++) {
             $routeProvider.when(
-                _makePath([namespace, routeDefs[i].path],
+                _makePath([namespace, routeDefs[i].path]),
                 routeDefs[i].route
             );
         }
@@ -108,7 +108,7 @@ function ($routeProvider, $locationProvider, $location) {
                 defaultRoute: function (path) {
                     _setDefaultRoute(path);
                     return this;
-                }
+                },
 
                 getPath: function (feature, elements) {
                     var namespace = _features[feature];
@@ -133,4 +133,4 @@ function ($routeProvider, $locationProvider, $location) {
     };
 }]);
 
-}(window, window.angular);
+})(window, window.angular);

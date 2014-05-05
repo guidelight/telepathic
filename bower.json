@@ -3,7 +3,9 @@
     "version": "0.0.1",
     "main": "dist/your-awesome-js-module.js",
     "ignore": [
+        "app",
         "test",
+        "node_modules",
         ".bowerrc",
         ".gitignore",
         ".jshintignore",
