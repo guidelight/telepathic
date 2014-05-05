@@ -1,13 +1,13 @@
 'use strict';
 
-var tele = angular.module('guidelight.telepathic', []);
+var tele = angular.module('guidelight.telepathic', ['ngRoute']);
 
 /**
 *   Provides an AngularJS $location wrapper that adds feature namespacing
 */
 tele.provider( 'telepathic',
 [
-    '$routeProvider', '$locationProvider', '$location'
+    '$routeProvider', '$locationProvider'
 ,
 function ($routeProvider, $locationProvider, $location) {
 

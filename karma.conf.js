@@ -19,7 +19,7 @@ module.exports = function(config) {
         "app/bower_components/angular-route/angular-route.js",
         'app/bower_components/angular-mocks/angular-mocks.js',
         'src/telepathic.js',
-        'test/*.js'
+        'test/*.spec.js'
     ],
 
 
