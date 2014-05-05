@@ -1,6 +1,6 @@
 'use strict';
 
-var tele = angular.module('guidelight.telepathic');
+var tele = angular.module('guidelight.telepathic', []);
 
 /**
 *   Provides an AngularJS $location wrapper that adds feature namespacing
