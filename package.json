@@ -28,7 +28,10 @@
   "homepage": "https://github.com/guidelight/telepathic",
   "devDependencies": {
     "gulp": "^3.6.2",
+    "gulp-concat": "^2.2.0",
     "gulp-karma": "0.0.4",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglify": "^0.2.1",
     "karma": "~0.12",
     "karma-chrome-launcher": "^0.1.2",
     "karma-firefox-launcher": "^0.1.3",

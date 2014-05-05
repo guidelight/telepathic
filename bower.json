@@ -5,6 +5,7 @@
     "ignore": [
         "app",
         "test",
+        "src",
         "node_modules",
         ".bowerrc",
         ".gitignore",

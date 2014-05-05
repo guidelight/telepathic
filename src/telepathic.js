@@ -1,5 +1,3 @@
-(function(window, angular, undefined) {
-
 'use strict';
 
 var tele = angular.module('guidelight.telepathic');
@@ -132,5 +130,3 @@ function ($routeProvider, $locationProvider, $location) {
         }
     };
 }]);
-
-})(window, window.angular);
