@@ -13,7 +13,7 @@ function ($routeProvider, $locationProvider, $location) {
 
     var _features = {};
 
-    // TODO: this should be in to util service
+    // TODO: this should be in a util service
     var _trimEnds = function (str, trimChar) {
         if (!str || !trimChar) {
             throw Error('can\'t trim an empty string');
@@ -30,10 +30,6 @@ function ($routeProvider, $locationProvider, $location) {
     var _makePath = function (elements) {
         if (!Array.isArray(elements)) {
             throw Error('makePath only accepts arrays');
-        }
-
-        if (elements[0] !== _config.featureRoot) {
-            elements.unshift(_config.featureRoot);
         }
 
         var path = ''
@@ -62,7 +58,7 @@ function ($routeProvider, $locationProvider, $location) {
         }
 
         if (_features[feature] && _features[feature] !== namespace) {
-            throw Error('Telepathic: Cannot redfined a feature\' namespace');
+            throw Error('Telepathic: Cannot redfined a feature\'s namespace');
         }
         _features[feature] = namespace;
 
@@ -86,15 +82,8 @@ function ($routeProvider, $locationProvider, $location) {
         hashPrefix: function (prefix) {
             $locationProvider.hashPrefix(prefix);
         },
-        $get : function() {
+        $get : ['$location', function($location) {
             return {
-                config: function (config) {
-                    if (!config) {
-                        return _config;
-                    }
-                    _config = config;
-                },
-
                 /**
                 *   Get/Set routes for the named feature.
                 */
@@ -106,6 +95,14 @@ function ($routeProvider, $locationProvider, $location) {
                 defaultRoute: function (path) {
                     _setDefaultRoute(path);
                     return this;
+                },
+
+                features: function () {
+                    return _features;
+                },
+
+                namespace: function (feature) {
+                    return _features[feature];
                 },
 
                 getPath: function (feature, elements) {
@@ -127,6 +124,6 @@ function ($routeProvider, $locationProvider, $location) {
                     $location.path(this.getPath(feature, elements));
                 }
             };
-        }
+        }]
     };
 }]);

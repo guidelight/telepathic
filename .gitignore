@@ -27,5 +27,6 @@ node_modules
 .bower-cache
 .bower-registry
 .bower-tmp
-app
+app/bower_components
+app/telepathic.js
 dist
