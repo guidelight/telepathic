@@ -29,4 +29,3 @@ node_modules
 .bower-tmp
 app/bower_components
 app/telepathic.js
-dist
