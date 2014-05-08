@@ -115,13 +115,16 @@ function ($routeProvider, $locationProvider, $location) {
                     if (typeof elements === 'string') {
                         elems = elements.split('/');
                     } else if (Array.isArray(elements)) {
-                        elems = elements;
+                        for (var i = 0, end = elements.length; i < end; i++) {
+                            elems[i] = elements[i] + '';
+                        }
                     }
-                    return _makePath(elems.unshift(namespace));
+                    return _makePath([].concat(namespace, elems));
                 },
 
                 path: function (feature, elements) {
                     $location.path(this.getPath(feature, elements));
+                    return $location.path();
                 }
             };
         }]
