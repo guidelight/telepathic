@@ -1,7 +1,7 @@
 {
     "name": "telepathic",
     "version": "0.0.1",
-    "main": "dist/your-awesome-js-module.js",
+    "main": "dist/telepathic.js",
     "ignore": [
         "app",
         "test",
@@ -15,7 +15,10 @@
         "gulpfile.js",
         "gruntfile.js",
         "package.json",
-        "README.md"
+        "README.md",
+        "karma.conf.js",
+        "module.prefix.js",
+        "module.suffix.js"
     ],
     "dependencies": {
         "angular": ">=1.2",
