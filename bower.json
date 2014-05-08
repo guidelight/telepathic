@@ -15,7 +15,6 @@
         "gulpfile.js",
         "gruntfile.js",
         "package.json",
-        "README.md",
         "karma.conf.js",
         "module.prefix.js",
         "module.suffix.js"

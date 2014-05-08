@@ -16,6 +16,8 @@ tele.provider( 'telepathic',
 ,
 function ($routeProvider, $locationProvider, $location) {
 
+    var html5Mode = false;
+    var hashPrefix = '';
     var _features = {};
 
     // TODO: this should be in a util service
@@ -79,12 +81,18 @@ function ($routeProvider, $locationProvider, $location) {
         $routeProvider.otherwise({ redirectTo: path });
     }
 
+    var _prefix = function () {
+        return html5Mode ? '' : '#!';
+    }
+
 
     return {
         html5Mode: function (mode) {
+            html5Mode = mode;
             $locationProvider.html5Mode(mode);
         },
         hashPrefix: function (prefix) {
+            hashPrefix = prefix;
             $locationProvider.hashPrefix(prefix);
         },
         $get : ['$location', function($location) {
@@ -98,7 +106,7 @@ function ($routeProvider, $locationProvider, $location) {
                 },
 
                 defaultRoute: function (path) {
-                    _setDefaultRoute(path);
+                    _defaultRoute(path);
                     return this;
                 },
 
@@ -130,11 +138,14 @@ function ($routeProvider, $locationProvider, $location) {
                 path: function (feature, elements) {
                     $location.path(this.getPath(feature, elements));
                     return $location.path();
+                },
+
+                link: function (feature, elements) {
+                    return _prefix() + this.getPath(feature, elements);
                 }
             };
         }]
     };
 }]);
-
 
 })(window, window.angular);
