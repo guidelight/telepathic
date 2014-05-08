@@ -23,15 +23,15 @@ var paths = {
 gulp.task('concat', function () {
     return gulp.src(paths.distlist)
         .pipe(concat('telepathic.js'))
-        .pipe(gulp.dest('./dist/'))
+        .pipe(gulp.dest('./'))
 });
 
 gulp.task('uglify', function () {
-    return gulp.src('dist/telepathic.js')
+    return gulp.src('./telepathic.js')
         .pipe(uglify())
         .pipe(stripDebug())
         .pipe(rename("telepathic.min.js"))
-        .pipe(gulp.dest('./dist/'))
+        .pipe(gulp.dest('./'))
 });
 
 gulp.task('complexity', function (){
@@ -40,7 +40,7 @@ gulp.task('complexity', function (){
 });
 
 gulp.task('copy', function (){
-    return gulp.src('dist/telepathic.js')
+    return gulp.src('./telepathic.js')
         .pipe(gulp.dest('./app/'));
 });
 
@@ -74,10 +74,4 @@ gulp.task('default', function() {
         }));
 });
 
-gulp.task('build', ['concat', 'uglify', 'copy', 'test', 'complexity']);
-
-
-
-
-
-
+gulp.task('build', ['concat', 'uglify', 'copy']);

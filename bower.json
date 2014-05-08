@@ -1,7 +1,7 @@
 {
     "name": "telepathic",
     "version": "0.0.1",
-    "main": "dist/telepathic.js",
+    "main": "telepathic.js",
     "ignore": [
         "app",
         "test",
