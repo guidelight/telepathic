@@ -1,6 +1,6 @@
 {
   "name": "telepathic",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "AngularJS $location wrapper that adds feature namespace",
   "main": "index.js",
   "directories": {
