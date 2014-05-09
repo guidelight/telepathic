@@ -38,7 +38,7 @@ function ($routeProvider, $locationProvider) {
                 qs.push(encodeURIComponent(param) + "=" + encodeURIComponent(queryparams[param]));
             }
         }
-        return '?' + str.join("&");
+        return '?' + str.join('&');
     };
 
     var _makePath = function (elements) {
@@ -46,7 +46,7 @@ function ($routeProvider, $locationProvider) {
             throw Error('makePath only accepts arrays');
         }
 
-        var path = ''
+        var path = '';
         for (var i = 0, end = elements.length; i < end; i++) {
             // ignore empty elements
             if (!elements[i]) {
@@ -166,25 +166,5 @@ function ($routeProvider, $locationProvider) {
         }]
     };
 }]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

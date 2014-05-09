@@ -1,13 +1,10 @@
 // Includes
 var gulp = require('gulp'),
     karma = require('gulp-karma'),
-    clean = require('gulp-clean'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
-    rename = require('gulp-rename'),
-    stripDebug = require('gulp-strip-debug'),
-    complexity = require('gulp-complexity'),
-    connect = require('gulp-connect');
+    extreplace = require('gulp-ext-replace'),
+    stripDebug = require('gulp-strip-debug');
 
 // Path definitions
 var paths = {
@@ -23,47 +20,6 @@ var paths = {
     ]
 };
 
-gulp.task('clean', function () {
-    try {
-        return gulp.src(paths.output, {read: false})
-            .pipe(clean());
-    } catch (e) {}
-});
-
-gulp.task('concat', function () {
-    return gulp.src(paths.distlist)
-        .pipe(concat('telepathic.js'))
-        .pipe(gulp.dest('./'));
-});
-
-gulp.task('uglify', function () {
-    return gulp.src('./telepathic.js')
-        .pipe(uglify())
-        .pipe(stripDebug())
-        .pipe(rename("telepathic.min.js"))
-        .pipe(gulp.dest('./'));
-});
-
-gulp.task('complexity', function (){
-    return gulp.src(paths.js)
-        .pipe(complexity());
-});
-
-gulp.task('copy', function (){
-    return gulp.src('./telepathic.js')
-        .pipe(gulp.dest('./app/'));
-});
-
-// Task to create a web server and serve the app during development
-gulp.task('serve', function () {
-    connect.server({
-        root: ['./app'],
-        port: 8077,
-        livereload: false
-    });
-});
-
-
 gulp.task('test', function() {
     // note: need to use a dummy file here so it picks up the karma.conf.js file array
     return gulp.src('./foo.js')
@@ -76,12 +32,14 @@ gulp.task('test', function() {
         });
 });
 
-gulp.task('default', function() {
-    return gulp.src(paths.js)
-        .pipe(karma({
-            configFile: 'karma.conf.js',
-            action: 'watch'
-        }));
+gulp.task('build', function () {
+    return gulp.src(paths.distlist)
+        .pipe(concat('./telepathic.js'))
+        .pipe(gulp.dest('./'))
+        .pipe(uglify())
+        .pipe(extreplace('.min.js'))
+        .pipe(gulp.dest('./'));
 });
 
-gulp.task('build', ['clean', 'concat', 'uglify', 'copy']);
+
+gulp.task('default', ['build', 'test']);
