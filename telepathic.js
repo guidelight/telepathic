@@ -10,7 +10,7 @@ var tele = angular.module('guidelight.telepathic', ['ngRoute']);
 /**
 *   Provides an AngularJS $location wrapper that adds feature namespacing
 */
-tele.provider( 'telepathic',
+tele.provider( 'tele',
 [
     '$routeProvider', '$locationProvider'
 ,
