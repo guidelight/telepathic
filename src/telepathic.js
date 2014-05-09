@@ -11,9 +11,11 @@ tele.provider( 'tele',
 ,
 function ($routeProvider, $locationProvider) {
 
-    var html5Mode = false;
-    var hashPrefix = '';
+    var _html5Mode = false;
+    var _hashPrefix = '';
     var _features = {};
+
+    var _serverApiBase = '';
 
     // TODO: this should be in a util service
     var _trimEnds = function (str, trimChar) {
@@ -29,6 +31,16 @@ function ($routeProvider, $locationProvider) {
         return str;
     };
 
+    var _makeQueryString = function (queryparams) {
+        var qs = [];
+        for(var param in queryparams) {
+            if (queryparams.hasOwnProperty(param)) {
+                qs.push(encodeURIComponent(param) + "=" + encodeURIComponent(queryparams[param]));
+            }
+        }
+        return '?' + str.join("&");
+    };
+
     var _makePath = function (elements) {
         if (!Array.isArray(elements)) {
             throw Error('makePath only accepts arrays');
@@ -39,6 +51,11 @@ function ($routeProvider, $locationProvider) {
             // ignore empty elements
             if (!elements[i]) {
                 continue;
+            }
+            if (typeof elements[i] === 'object') {
+                var qs = _makeQueryString(elements[i]);
+                path = path + qs;
+                break;
             }
             var elem = _trimEnds(elements[i], '/');
             if (!elem) {
@@ -77,7 +94,7 @@ function ($routeProvider, $locationProvider) {
     }
 
     var _prefix = function () {
-        return html5Mode ? '' : '#!';
+        return _html5Mode ? '' : '#!';
     }
 
     var _getPath = function (feature, elements) {
@@ -100,12 +117,15 @@ function ($routeProvider, $locationProvider) {
 
     return {
         html5Mode: function (mode) {
-            html5Mode = mode;
+            _html5Mode = mode;
             $locationProvider.html5Mode(mode);
         },
         hashPrefix: function (prefix) {
-            hashPrefix = prefix;
+            _hashPrefix = prefix;
             $locationProvider.hashPrefix(prefix);
+        },
+        serverBase: function (apiBasePath) {
+            _serverApiBase = apiBasePath;
         },
         $get : ['$location', function($location) {
             return {
@@ -136,6 +156,10 @@ function ($routeProvider, $locationProvider) {
                 },
                 link: function (feature, elements) {
                     return _prefix() + _getPath(feature, elements);
+                },
+
+                apiPath: function (feature, elements, queryparams) {
+                    return _makePath([].concat(_serverApiBase, feature, elements, queryparams));
                 }
 
             };

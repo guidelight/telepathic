@@ -9,9 +9,7 @@ describe( 'telepathic', function() {
 
         it('should properly register features',
 
-            inject( function (telepathic) {
-
-                var tele = telepathic;
+            inject( function (tele) {
 
                 tele.routes( 'blog', 'blog/', [
                     { path: ':userid', route: { template: 'howdy' }}
@@ -28,9 +26,7 @@ describe( 'telepathic', function() {
 
         it('should generate feature paths from array of path elements',
 
-            inject( function (telepathic) {
-
-                var tele = telepathic;
+            inject( function (tele) {
 
                 tele.routes( 'blog', 'blog/', [
                     { path: ':userid', route: { template: 'howdy' }},
