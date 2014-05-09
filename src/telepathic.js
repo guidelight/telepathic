@@ -9,7 +9,7 @@ tele.provider( 'telepathic',
 [
     '$routeProvider', '$locationProvider'
 ,
-function ($routeProvider, $locationProvider, $location) {
+function ($routeProvider, $locationProvider) {
 
     var html5Mode = false;
     var hashPrefix = '';
@@ -80,6 +80,23 @@ function ($routeProvider, $locationProvider, $location) {
         return html5Mode ? '' : '#!';
     }
 
+    var _getPath = function (feature, elements) {
+        var namespace = _features[feature];
+        if (!namespace) {
+            throw Error('Telepathic: invalid feature name: ' + feature);
+        }
+        // force into an array
+        var elems = [];
+        if (typeof elements === 'string') {
+            elems = elements.split('/');
+        } else if (Array.isArray(elements)) {
+            for (var i = 0, end = elements.length; i < end; i++) {
+                elems[i] = elements[i] + '';
+            }
+        }
+        return _makePath([].concat(namespace, elems));
+    };
+
 
     return {
         html5Mode: function (mode) {
@@ -99,7 +116,6 @@ function ($routeProvider, $locationProvider, $location) {
                     _defineRoutes(feature, namespace, routeDefs);
                     return this;
                 },
-
                 defaultRoute: function (path) {
                     _defaultRoute(path);
                     return this;
@@ -108,37 +124,43 @@ function ($routeProvider, $locationProvider, $location) {
                 features: function () {
                     return _features;
                 },
-
                 namespace: function (feature) {
                     return _features[feature];
                 },
 
-                getPath: function (feature, elements) {
-                    var namespace = _features[feature];
-                    if (!namespace) {
-                        throw Error('Telepathic: invalid feature name: ' + feature);
-                    }
-                    // force into an array
-                    var elems = [];
-                    if (typeof elements === 'string') {
-                        elems = elements.split('/');
-                    } else if (Array.isArray(elements)) {
-                        for (var i = 0, end = elements.length; i < end; i++) {
-                            elems[i] = elements[i] + '';
-                        }
-                    }
-                    return _makePath([].concat(namespace, elems));
-                },
-
                 path: function (feature, elements) {
-                    $location.path(this.getPath(feature, elements));
+                    if (feature) {
+                        $location.path(_getPath(feature, elements));
+                    }
                     return $location.path();
                 },
-
                 link: function (feature, elements) {
-                    return _prefix() + this.getPath(feature, elements);
+                    return _prefix() + _getPath(feature, elements);
                 }
+
             };
         }]
     };
 }]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

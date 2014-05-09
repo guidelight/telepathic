@@ -1,6 +1,7 @@
 // Includes
 var gulp = require('gulp'),
     karma = require('gulp-karma'),
+    clean = require('gulp-clean'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
@@ -12,18 +13,27 @@ var gulp = require('gulp'),
 var paths = {
     js: ['src/telepathic.js'],
     distlist: [
-        'module.prefix.js',
+        'src/module.prefix.js',
         'src/telepathic.js',
-        'module.suffix.js'
+        'src/module.suffix.js'
+    ],
+    output: [
+        './telepathic.js',
+        './telepathic.min.js'
     ]
 };
 
-
+gulp.task('clean', function () {
+    try {
+        return gulp.src(paths.output, {read: false})
+            .pipe(clean());
+    } catch (e) {}
+});
 
 gulp.task('concat', function () {
     return gulp.src(paths.distlist)
         .pipe(concat('telepathic.js'))
-        .pipe(gulp.dest('./'))
+        .pipe(gulp.dest('./'));
 });
 
 gulp.task('uglify', function () {
@@ -31,7 +41,7 @@ gulp.task('uglify', function () {
         .pipe(uglify())
         .pipe(stripDebug())
         .pipe(rename("telepathic.min.js"))
-        .pipe(gulp.dest('./'))
+        .pipe(gulp.dest('./'));
 });
 
 gulp.task('complexity', function (){
@@ -50,7 +60,7 @@ gulp.task('serve', function () {
         root: ['./app'],
         port: 8077,
         livereload: false
-    })
+    });
 });
 
 
@@ -74,4 +84,4 @@ gulp.task('default', function() {
         }));
 });
 
-gulp.task('build', ['concat', 'uglify', 'copy']);
+gulp.task('build', ['clean', 'concat', 'uglify', 'copy']);
