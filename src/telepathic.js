@@ -65,9 +65,6 @@ function ($routeProvider, $locationProvider) {
 
     // converts one or more ordered elements into a path, possibly with a query string
     // the given elements parameter must be an array
-    // elements may contain any type, including a function or an object
-    // function types are called to collect their value
-    // object types must represent a query string hash and can only occur as the last element
     var _makePath = function (elements) {
         if (!Array.isArray(elements)) {
             throw Error('makePath only accepts arrays');
@@ -79,18 +76,11 @@ function ($routeProvider, $locationProvider) {
             if (!_isValidPathElement(elements[i])) {
                 continue;
             }
-            console.log(typeof elements[i]);
-            if (typeof elements[i] === 'function') {
-                var result = element[i]();
-                if (!_isValidPathElement(result)) {
-                    continue;
-                }
-                elem = result + '';
-            } else if (typeof elements[i] === 'object') {
+            if (typeof elements[i] === 'object') {
                 // query string must be the terminal element
                 return path + _makeQueryString(elements[i]);
             } else {
-                elem = _trimEnds(elements[i], '/');
+                elem = _trimEnds((elements[i] + ''), '/');
             }
             if (!elem) {
                 continue;
