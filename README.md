@@ -1,11 +1,12 @@
 # telepathic
 ==========
 
-AngularJS $location and $routeProvider wrapper that adds feature namespacing
+AngularJS $location and $routeProvider wrapper that adds 'feature' namespacing.
 
-The idea behind telepathic is to manage app 'feature' paths without worrying about collisions.  For example, a blog feature might namespace all paths with 'blog/'.  But, if it is to be considered reusable, then
-it should just as easily be namespaced into something else.  There is a 'feature' and it's 'namespace'.  In this
-case the feature is 'blog' and the namespace is 'blog/'.  We can move the namespace to 'features/blog/' if we need to by simply changing it's namespace and not having to track down every single path reference throughout an entire app and move it to another namespace.
+The idea behind telepathic is to manage the paths associated witha a browser app's 'features' without worrying about collisions.  For example, a blog feature might namespace all paths with 'blog/'.  But it could also be namespaced into paths starting with 'myblog/' or any other namespace.  So, a 'feature' has a 'namespace'.  In this
+example, the feature is 'blog' and the namespace is 'blog/'.  We can move the namespace to 'public/blog/' if we need to by simply changing it's namespace and not having to track down every single path reference throughout an entire app - in directives, in templates, in controllers and services - and move it to another namespace.
+
+As an added benefit of this approach, '''telepathic''' also provides methods for constructing server urls for web services or simple pages.  If, for example, you have an api for blog content, you may have your web api versioned and rooted in, say, '/api/v1'.  Similar to browser features and namespaces, you can set this up as feature 'blog' and namespace '/api/v1/blog'.
 
 ## Installation
 First add the bower package:

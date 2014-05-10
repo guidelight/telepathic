@@ -11,15 +11,23 @@ tele.provider( 'tele',
 ,
 function ($routeProvider, $locationProvider) {
 
+    // browser-sde: html5Mode and hashPrefix - same as $locationProvider
     var _html5Mode = false;
     var _hashPrefix = '';
+
+    // browser-sde: a hash of the registered features
     var _features = {};
 
+    // browser-sde: a list of all the paths defined on all routes
     var _definedPaths = [];
 
+    // server-side: the default root path on the server for all service urls
     var _serverApiBase = '';
 
+
     // TODO: this should be in a util service
+    // given a string str, and a trim character trimChar, remove all instances of trimChar
+    // from both ends of str
     var _trimEnds = function (str, trimChar) {
         if (!str || !trimChar) {
             throw Error('can\'t trim an empty string');
@@ -34,6 +42,8 @@ function ($routeProvider, $locationProvider) {
         return str;
     };
 
+    // given a hash of property/values in queryparams, convert them into a query string
+    // returns empty string if hash is empty, or query string with '?' already prefixed
     var _makeQueryString = function (queryparams) {
         var qs = [];
         for(var param in queryparams) {
@@ -44,21 +54,44 @@ function ($routeProvider, $locationProvider) {
         return qs.length ? '?' + qs.join('&') : '';
     };
 
+    var _notDefined = function (foo) {
+        return foo === undefined || foo === null;
+    };
+
+    var _isValidPathElement = function (element) {
+        return element !== '' && element !== null && element !== undefined && element !== NaN;
+    };
+
+
+    // converts one or more ordered elements into a path, possibly with a query string
+    // the given elements parameter must be an array
+    // elements may contain any type, including a function or an object
+    // function types are called to collect their value
+    // object types must represent a query string hash and can only occur as the last element
     var _makePath = function (elements) {
         if (!Array.isArray(elements)) {
             throw Error('makePath only accepts arrays');
         }
-
         var path = '';
+        var elem = '';
         for (var i = 0, end = elements.length; i < end; i++) {
-            // ignore empty elements
-            if (elements[i] === '' || elements[i] === null || elements[i] === undefined || elements[i] === NaN) {
+            // ignore invalid elements
+            if (!_isValidPathElement(elements[i])) {
                 continue;
             }
-            if (typeof elements[i] === 'object') {
+            console.log(typeof elements[i]);
+            if (typeof elements[i] === 'function') {
+                var result = element[i]();
+                if (!_isValidPathElement(result)) {
+                    continue;
+                }
+                elem = result + '';
+            } else if (typeof elements[i] === 'object') {
+                // query string must be the terminal element
                 return path + _makeQueryString(elements[i]);
+            } else {
+                elem = _trimEnds(elements[i], '/');
             }
-            var elem = _trimEnds(elements[i], '/');
             if (!elem) {
                 continue;
             }
@@ -67,10 +100,6 @@ function ($routeProvider, $locationProvider) {
         return path;
     };
 
-
-    var _notDefined = function (foo) {
-        return foo === undefined || foo === null;
-    }
 
     var _defineRoutes = function (feature, namespace, routeDefs) {
         if (_notDefined(feature) || _notDefined(namespace) || _notDefined(routeDefs) || !Array.isArray(routeDefs)) {
