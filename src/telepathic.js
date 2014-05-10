@@ -3,7 +3,7 @@
 var tele = angular.module('guidelight.telepathic', ['ngRoute']);
 
 /**
-*   Provides an AngularJS $location wrapper that adds feature namespacing
+*   Provides an AngularJS $location and $routeProvider wrapper that adds feature namespacing
 */
 tele.provider( 'tele',
 [
@@ -158,6 +158,9 @@ function ($routeProvider, $locationProvider) {
                     return _prefix() + _getPath(feature, elements);
                 },
 
+                /**
+                *   Server path generation, e.g. for a web service api
+                */
                 apiPath: function (feature, elements, queryparams) {
                     return _makePath([].concat(_serverApiBase, feature, elements, queryparams));
                 }
