@@ -47,7 +47,7 @@ function ($routeProvider, $locationProvider) {
     var _makeQueryString = function (queryparams) {
         var qs = [];
         for(var param in queryparams) {
-            if (queryparams.hasOwnProperty(param)) {
+            if (queryparams.hasOwnProperty(param) && _isValidPathElement(queryparams[param]) ) {
                 qs.push(encodeURIComponent(param) + "=" + encodeURIComponent(queryparams[param]));
             }
         }
