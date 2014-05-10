@@ -15,6 +15,8 @@ function ($routeProvider, $locationProvider) {
     var _hashPrefix = '';
     var _features = {};
 
+    var _definedPaths = [];
+
     var _serverApiBase = '';
 
     // TODO: this should be in a util service
@@ -25,8 +27,9 @@ function ($routeProvider, $locationProvider) {
         while (str[0] === '/') {
             str = str.slice(1);
         }
+        //console.log(str);
         while (str.slice(-1) === '/') {
-            str = str.slice(0, str.length -1);
+            str = str.slice(0, str.length - 1);
         }
         return str;
     };
@@ -38,7 +41,7 @@ function ($routeProvider, $locationProvider) {
                 qs.push(encodeURIComponent(param) + "=" + encodeURIComponent(queryparams[param]));
             }
         }
-        return '?' + str.join('&');
+        return qs.length ? '?' + qs.join('&') : '';
     };
 
     var _makePath = function (elements) {
@@ -49,13 +52,11 @@ function ($routeProvider, $locationProvider) {
         var path = '';
         for (var i = 0, end = elements.length; i < end; i++) {
             // ignore empty elements
-            if (!elements[i]) {
+            if (elements[i] === '' || elements[i] === null || elements[i] === undefined || elements[i] === NaN) {
                 continue;
             }
             if (typeof elements[i] === 'object') {
-                var qs = _makeQueryString(elements[i]);
-                path = path + qs;
-                break;
+                return path + _makeQueryString(elements[i]);
             }
             var elem = _trimEnds(elements[i], '/');
             if (!elem) {
@@ -75,15 +76,16 @@ function ($routeProvider, $locationProvider) {
         if (_notDefined(feature) || _notDefined(namespace) || _notDefined(routeDefs) || !Array.isArray(routeDefs)) {
             throw Error('Telepathic: Incorrect or missing parameters for _defineRoutes');
         }
-
         if (_features[feature] && _features[feature] !== namespace) {
             throw Error('Telepathic: Cannot redfined a feature\'s namespace');
         }
         _features[feature] = namespace;
 
         for (var i = 0, end = routeDefs.length; i < end; i++) {
+            var definedPath = _makePath([namespace, routeDefs[i].path]);
+            _definedPaths.push(definedPath);
             $routeProvider.when(
-                _makePath([namespace, routeDefs[i].path]),
+                definedPath,
                 routeDefs[i].route
             );
         }
@@ -97,12 +99,7 @@ function ($routeProvider, $locationProvider) {
         return _html5Mode ? '' : '#!';
     }
 
-    var _getPath = function (feature, elements) {
-        var namespace = _features[feature];
-        if (!namespace) {
-            throw Error('Telepathic: invalid feature name: ' + feature);
-        }
-        // force into an array
+    var _forceToArrayOfStrings = function (elements) {
         var elems = [];
         if (typeof elements === 'string') {
             elems = elements.split('/');
@@ -111,7 +108,15 @@ function ($routeProvider, $locationProvider) {
                 elems[i] = elements[i] + '';
             }
         }
-        return _makePath([].concat(namespace, elems));
+        return elems;
+    };
+
+    var _getPath = function (feature, elements) {
+        var namespace = _features[feature];
+        if (!namespace) {
+            throw Error('Telepathic: invalid feature name: ' + feature);
+        }
+        return _makePath([].concat(namespace, _forceToArrayOfStrings(elements)));
     };
 
 
@@ -130,7 +135,7 @@ function ($routeProvider, $locationProvider) {
         $get : ['$location', function($location) {
             return {
                 /**
-                *   Get/Set routes for the named feature.
+                *   Browser-side feature and route registration, and path/link generation
                 */
                 routes: function (feature, namespace, routeDefs) {
                     _defineRoutes(feature, namespace, routeDefs);
@@ -147,6 +152,9 @@ function ($routeProvider, $locationProvider) {
                 namespace: function (feature) {
                     return _features[feature];
                 },
+                definedPaths: function () {
+                    return _definedPaths;
+                },
 
                 path: function (feature, elements) {
                     if (feature) {
@@ -158,16 +166,34 @@ function ($routeProvider, $locationProvider) {
                     return _prefix() + _getPath(feature, elements);
                 },
 
+
                 /**
                 *   Server path generation, e.g. for a web service api
                 */
                 apiPath: function (feature, elements, queryparams) {
-                    return _makePath([].concat(_serverApiBase, feature, elements, queryparams));
+                    return _makePath([].concat(_serverApiBase, feature, _forceToArrayOfStrings(elements), queryparams));
                 }
 
             };
         }]
     };
 }]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
