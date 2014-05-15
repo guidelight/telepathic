@@ -129,7 +129,9 @@ function ($routeProvider, $locationProvider) {
             elems = elements.split('/');
         } else if (Array.isArray(elements)) {
             for (var i = 0, end = elements.length; i < end; i++) {
-                elems[i] = elements[i] + '';
+                if (_isValidPathElement(elements[i])) {
+                    elems.push(elements[i] + '');
+                }
             }
         }
         return elems;
