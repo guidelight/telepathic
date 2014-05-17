@@ -151,7 +151,7 @@ function ($routeProvider, $locationProvider) {
             $locationProvider.hashPrefix(prefix);
         },
         serverBase: function (apiBasePath) {
-            _serverApiBase = apiBasePath;
+            _serverApiBase = _trimEnds(apiBasePath, '/');
         },
         $get : ['$location', function($location) {
             return {
@@ -186,7 +186,9 @@ function ($routeProvider, $locationProvider) {
                 link: function (feature, elements) {
                     return _prefix() + _getPath(feature, elements);
                 },
-
+                activePath: function () {
+                    return $location.path();
+                },
 
                 /**
                 *   Server path generation, e.g. for a web service api
